@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+ <html>
+
+ <head>
+ <title>untitled</title>
+ <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+ <meta name="generator" content="Geany 1.34.1" />
+ <script>
+ var denominations = [0.05, 0.1, 1, 5, 10, 20, 40, 50, 100, 200, 500, 1000];
+ function searchDenomination(amount)
+ {
+ var index = 0;
+ while (index < denominations.length && amount > denominations[index])
+
+index++;
+ return index-1;
+ }
+ function compute()
+ {
+ document.getElementById('denominations').innerHTML = '';
+ var amt = parseInt(document.getElementById('amount').value);
+ var text = document.createTextNode('Change = '+amt);
+ var p = document.createElement('p');
+ p.appendChild(text);
+ document.getElementById('denominations').appendChild(p);
+
+
+ text = document.createTextNode('the denominations = '+denominations);
+ p = document.createElement('p');
+ p.appendChild(text);
+ document.getElementById('denominations').appendChild(p);
+
+ document.getElementById('output').innerHTML = '';
+ var row = document.createElement('tr');
+
+ text = document.createTextNode('Denomination');
+ var col = document.createElement('th');
+ col.appendChild(text);
+ col.style = 'border: 1px solid black; text-align: center';
+ row.appendChild(col);
+
+ text = document.createTextNode('Qty');
+ col = document.createElement('th');
+ col.appendChild(text);
+ col.style = 'border: 1px solid black; text-align: center';
+ row.appendChild(col);
+
+ text = document.createTextNode('Denom * Qty');
+ col = document.createElement('th');
+ col.appendChild(text);
+col.style = 'border: 1px solid black; text-align: center';
+row.appendChild(col);
+
+ document.getElementById('output').appendChild(row);
+
+
+ var index = 0;
+ var qty = 0;
+ while (amt > 0)
+ {
+ row = document.createElement('tr');
+ index = searchDenomination(amt);
+ qty = parseInt(amt / denominations[index]);
+ amt -= qty * denominations[index];
+
+ text = document.createTextNode(denominations[index]);
+ col = document.createElement('td');
+ col.appendChild(text);
+ col.style = 'border: 1px solid black; text-align: center';
+ row.appendChild(col);
+
+ text = document.createTextNode(qty);
+ col = document.createElement('td');
+ col.appendChild(text);
+ col.style = 'border: 1px solid black; text-align: center';
+ row.appendChild(col);
+
+ text = document.createTextNode(qty * denominations[index]);
+ col = document.createElement('td');
+ col.appendChild(text);
+ col.style = 'border: 1px solid black; text-align: center';
+ row.appendChild(col);
+
+ document.getElementById('output').appendChild(row);
+
+ }
+
+ }
+ function checkValue(elem)
+ {
+ if(elem.value)
+ if(elem.value > 999 || elem < 0)
+ document.getElementById('buttonCompute').disabled = true;
+ else
+ document.getElementById('buttonCompute').disabled = false;
+ else
+ {
+ document.getElementById('amount').value = '';
+ document.getElementById('buttonCompute').disabled = true;
+ }
+ }
+ </script>
+ </head>
+
+ <body>
+ <h2>Given a set of coins and bills, and an amount of change we need to return,
+we are asked to calculate the number of each denomination that will make the
+amount</h2>
+
+ <input type='text' placeholder='amount for change' id='amount' oninput='checkValue(this)' />
+
+ <button type='button' onclick='compute()' id='buttonCompute' disabled >
+ 	
+ Clickto see the breakdown...
+</button>
+ <h2>The result of computation:</h2>
+ <h3 id='denominations'></h3>
+ <table style='border-collapse: collapse;' id='output' ></table>
+ </body>
+ </html>
